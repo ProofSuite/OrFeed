@@ -309,7 +309,7 @@ contract PremiumFeedPrices{
                     // the token in which the conversion is made again (needed as a conversion token destination)
                     IERC20Token(token1)
                 ],
-                // the amount of token1 that the user will recieve
+                // the amount of token2 that the user inputs
                 amount
             ))[0];
         } else {
@@ -327,7 +327,7 @@ contract PremiumFeedPrices{
                     // the token in which the conversion is made again (needed as a conversion token destination)
                     IERC20Token(token2)
                 ],
-                // the amount of token1 that the user will recieve
+                // the amount of token1 that the user inputs
                 amount
             ))[0];
         }
