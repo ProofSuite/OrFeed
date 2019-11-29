@@ -73,6 +73,22 @@ interface Kyber {
     function getInputAmount(ERC20 from, ERC20 to, uint256 amount) external view returns(uint256);
 }
 
+contract IERC20Token {
+    function name() public view returns (string) {this;}
+    function symbol() public view returns (string) {this;}
+    function decimals() public view returns (uint8) {this;}
+    function totalSupply() public view returns (uint256) {this;}
+    function balanceOf(address _owner) public view returns (uint256) {_owner; this;}
+    function allowance(address _owner, address _spender) public view returns (uint256) {_owner; _spender; this;}
+
+    function transfer(address _to, uint256 _value) public returns (bool success);
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
+    function approve(address _spender, uint256 _value) public returns (bool success);
+}
+
+interface BancorNetwork {
+    function getReturnByPath(IERC20Token[] _path, uint256 _amount) external view returns (uint256, uint256) {
+}
 
 library SafeMath {
     function mul(uint256 a, uint256 b) internal constant returns(uint256) {
@@ -187,8 +203,11 @@ contract PremiumFeedPrices{
             price= kyberPrice(toA1, toA2, theSide, amount);
          }
          
-         
-         return price;
+        if (equal(theExchange, "BANCOR")){
+            price = bancorPrice(toA1, toA2, theSide, amount);
+        }
+
+        return price;
      }
     
     function uniswapPrice(address token1, address token2, string  side, uint256 amount) public constant returns (uint256){
@@ -258,14 +277,62 @@ contract PremiumFeedPrices{
             price = kyber.getInputAmount(ERC20(token2), ERC20(token1), amount);
            }
            else{
-                price = kyber.getOutputAmount(ERC20(token1), ERC20(token2), amount);
-                 
-                
+                price = kyber.getOutputAmount(ERC20(token1), ERC20(token2), amount); 
            }
          
          return price;
      }
     
+    function bancorPrice(address token1, address token2, string side, uint256 amount) public constant returns (uint256){
+        BancorNetwork bancorNetwork = BancorNetwork(0x0e936B11c2e7b601055e58c7E32417187aF4de4a);
+        uint256 price;
+        // in case of Ether (or Weth), we need to provide the address of the EtherToken to the BancorNetwork
+        if (token1 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE || token1 == 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2){
+            // the EtherToken addresss for BancorNetwork
+            token1 = 0xc0829421C1d260BD3cB3E0F06cfE2D52db2cE315;
+        }
+        if (token2 == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE || token2 == 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2){
+            token2 = 0xc0829421C1d260BD3cB3E0F06cfE2D52db2cE315;
+        }
+        if(equal(side, "BUY")){
+            price = (bancorNetwork.getReturnByPath(
+                // the token converter path
+                [
+                    // the token to be converted
+                    IERC20Token(token2),
+                    // the BNT token (needed as a converter)
+                    IERC20Token(0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c),
+                    // the BNT token again (needed as a conversion token destination)
+                    IERC20Token(0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c),
+                    // the token in which the conversion is made (needed as a converter)
+                    IERC20Token(token1),
+                    // the token in which the conversion is made again (needed as a conversion token destination)
+                    IERC20Token(token1)
+                ],
+                // the amount of token1 that the user will recieve
+                amount
+            ))[0];
+        } else {
+            price = (bancorNetwork.getReturnByPath(
+                // the token converter path
+                [
+                    // the token to be converted
+                    IERC20Token(token1),
+                    // the BNT token (needed as a converter)
+                    IERC20Token(0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c),
+                    // the BNT token again (needed as a conversion token destination)
+                    IERC20Token(0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c),
+                    // the token in which the conversion is made (needed as a converter)
+                    IERC20Token(token2),
+                    // the token in which the conversion is made again (needed as a conversion token destination)
+                    IERC20Token(token2)
+                ],
+                // the amount of token1 that the user will recieve
+                amount
+            ))[0];
+        }
+        reutrn price;
+    }
     
     
     function getUniswapContract(address tokenAddress) public constant returns (address){
@@ -289,14 +356,14 @@ contract PremiumFeedPrices{
             
         if(contains("UNISWA", exString ) == true){
             return "UNISWAP";
-        }
-        
-        else if(contains("KYBE", exString ) == true){
+        } 
+        if(contains("KYBE", exString ) == true){
             return "KYBER";
         }
-        else{
-            return "NONE";
+        if(contains("BANCOR", exString)) {
+            return "BANCOR";
         }
+        return "NONE";
     }
     
     
