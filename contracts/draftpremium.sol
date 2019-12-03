@@ -1,4 +1,4 @@
-//Example: https://etherscan.io/address/0x9b80013caff912149525c1bc1d264939a1a573a7#readContract
+//Dapp test 0x5e00a16eb51157fb192bd4fcaef4f79a4f16f480
 
 pragma solidity ^0.4.26;
 contract UniswapExchangeInterface {
@@ -65,11 +65,6 @@ interface OrFeedInterface {
   function getTokenAddress ( string symbol ) external view returns ( address );
   function getSynthBytes32 ( string symbol ) external view returns ( bytes32 );
   function getForexAddress ( string symbol ) external view returns ( address );
-}
-
-interface StockETFPrice{
-    function getLastPrice (string symbol) constant returns (uint256);
-    function getTimeUpdated (string symbol) constant returns (uint256);
 }
 
 interface Kyber {
@@ -183,24 +178,13 @@ contract PremiumFeedPrices{
          string memory theExchange = determineExchange(venue);
          
          uint256 price = 0;
-         string memory queryVenue = venue;
-         string memory queryToSymbol = toSymbol;
-         string memory queryFromSymbol = fromSymbol;
          
-         if(equal(queryVenue,"PROVIDER1") && equal(queryToSymbol,"USD")){
-             StockETFPrice stockProvider = StockETFPrice(0x7556fccfb056ada7aa10c6ed88b5def40d66c591);
-             price = stockProvider.getLastPrice(queryFromSymbol);
-         }
-         
-         else if(equal(theExchange,"UNISWAP")){
+         if(equal(theExchange,"UNISWAP")){
             price= uniswapPrice(toA1, toA2, theSide, amount);
          }
          
-         else if(equal(theExchange,"KYBER")){
+         if(equal(theExchange,"KYBER")){
             price= kyberPrice(toA1, toA2, theSide, amount);
-         }
-         else{
-             price=0;
          }
          
          

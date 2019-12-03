@@ -64,19 +64,6 @@ uint price = orfeed.getExchangeRate("MKR", "EUR", "", 100000000000000);
 ```
 
 
-Experimental:
-
-
-```javascript
-uint price = orfeed.getExchangeRate("AAPL", "USD", "PROVIDER1", 1);
-```
-
-
-Stocks and ETFs are provided by a centralized oracle and we are currently working on a register in which requests can go to any provider (centralized or decentralized)... or of course, aggregated with the removal of outliers (recommended). The current contract supports the top 10 equities by market cap (AAPL, AMZN, JNJ etc) and the top 5 ETFs (SPY, etc)
-
-You can run you own oracle by deploying a Node app with the example code in /examples/oracleNodeExampleApp (contract code is in contacts/stockETFPriceContract.sol) and provide as many stocks at the update frequency of your choice. We recommend buying GAS token (we are in no way affiliated and not shilling) to lower your Ethereum fee risk (and so you can pay a reasonable gas price f you plan to run an oracle for a long period of time). Otherwise, you will be exposed to gas fee price risk, or your prices might not update at the frequency you would like.
-
-
 
 
 ### Read the full docs [orfeed.org/docs](https://www.orfeed.org/docs)
