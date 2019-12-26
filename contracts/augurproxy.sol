@@ -75,7 +75,6 @@ interface IERC20 {
 }
 
 contract AugurProxy is Ownable {
-	
     address public owner;
     address _repTokenAddress;
     mapping(address => uint256) public repTokenBalance;
@@ -83,14 +82,12 @@ contract AugurProxy is Ownable {
 	constructor(address repTokenAddress) public Ownable() {
 	  owner = msg.sender;
 	  _repTokenAddress = repTokenAddress;
-    }
-   
+  }
 	// deposit allows users to deposit rep tokens to the contract after approval
 	function deposit(uint256 amount) public {
 	    IERC20 repToken = IERC20(_repTokenAddress);
-	    require(
-	    		repToken.transferFrom(msg.sender, address(this), amount), 
-	    		"Unable to deposit tokens, please make sure this contract is approved for the deposit");
+      string memory errorMsg = "Unable to deposit tokens, please make sure this contract is approved for the deposit";
+	    require(repToken.transferFrom(msg.sender, address(this), amount), errorMsg);
 	    repTokenBalance[msg.sender] += amount;
 	}
 
@@ -101,18 +98,18 @@ contract AugurProxy is Ownable {
 
 	// withdraw allows the owner to withdraw any extra REP Tokens on the contract
 	function withdrawRepTokens() external {
-	    require(msg.sender == owner);
+	    require(msg.sender == owner, "Only owner can withdraw the extra REP tokens");
 	    IERC20 repTokens = IERC20(_repTokenAddress);
-	    require(repTokens.transfer(tx.origin, repTokens.balanceOf(address(this))), "Unable to withdraw rep tokens");
+	    require(repTokens.transfer(msg.sender, repTokens.balanceOf(address(this))), "Unable to withdraw rep tokens");
 	}
 
-	function requestEventResult(string eventName, string source) external returns(string) {
+	function requestEventResult(string calldata eventName, string calldata source) external returns(string memory) {
 		require(repTokenBalance[msg.sender] > 0, "Please deposit rep tokens into this contract to continue");
 		return "";
 	}
 
-	function getRequestedEventResult(string eventName, string source, string referenceId) external view returns(string) {
+	function getRequestedEventResult(string calldata eventName, string calldata source, string calldata referenceId) 
+  external view returns(string memory) {
 	   return "";
 	}
-  
 }
