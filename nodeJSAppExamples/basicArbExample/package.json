@@ -1,0 +1,37 @@
+{
+  "name": "node-js-getting-started",
+  "version": "0.3.0",
+  "description": "Simple example app for interacting with smart contracts",
+  "engines": {
+    "node": "10.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "cors": "",
+    "sha3": "2.0.2",
+    "infura-web3-provider": "0.0.3",
+    "web3": "",
+    "web3-provider-engine": "",
+    "play-sound": ""
+  },
+  "devDependencies": {
+    "request": "^2.81.0",
+    "tape": "^4.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroku/node-js-getting-started"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
+}
