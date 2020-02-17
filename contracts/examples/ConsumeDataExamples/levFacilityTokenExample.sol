@@ -99,13 +99,10 @@ library SafeMath {
          uint256 totalInPositions =0;
          uint256 totalInCollateralizerClaimPool = 0;
              
-        // Its a payable function works as a token factory.
-        function () payable{
-            createTokens();
-        }
+       
 
         // Constructor
-        constructor() public payable {
+        constructor() public  {
             owner = msg.sender; 
             balances[owner] = _totalSupply;
             kyberProxyAddress = 0x818E6FECD516Ecc3849DAf6845e3EC868087B755;
@@ -121,7 +118,7 @@ library SafeMath {
 
 
         // This function creates Tokens  
-         function createTokens() payable {
+         function createTokens() external payable {
             if(isMinting == true){
                 require(msg.value > 0);
                 RATE = getETH2TokenRate();
