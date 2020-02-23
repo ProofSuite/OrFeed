@@ -275,8 +275,8 @@ OrFeed가 다른 많은 계약에 대한 대리 역할을하기 때문에 대부
 
 ## 기여
 
-OrFeed's source code is [licensed under the Apache 2.0 license](https://github.com/ProofSuite/OrFeed/blob/master/LICENSE), and we welcome contributions.
+OrFeed의 소스 코드는 [Apache 2.0 라이센스에 따라 라이센스가 부여됨] (https://github.com/ProofSuite/OrFeed/blob/master/LICENSE)이며 기여를 환영합니다.
 
-The preferred branch of pull requests is the `develop` branch. Additionally, we are frequently adding small bounties on Gitcoin for mission-critical initiatives.
+풀 요청의 기본 분기는 '개발'분기입니다. 또한 미션 크리티컬 이니셔티브를 위해 Gitcoin에 작은 현상금을 자주 추가하고 있습니다.
 
-Thanks for being awesome!
+대단해 주셔서 감사합니다!
