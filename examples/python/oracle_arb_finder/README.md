@@ -26,6 +26,9 @@ pip3 install -r requirements.txt
 python3 app.py
 ```
 
+## Author
+This project is forked from [https://github.com/edd34/oracle_orfeed](https://github.com/edd34/oracle_orfeed)
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
