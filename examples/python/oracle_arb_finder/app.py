@@ -1,4 +1,4 @@
-from lib.get_price import (
+from helper.get_price import (
     get_raw_price_async,
     get_clean_price,
     compute_arb_opportunities,
